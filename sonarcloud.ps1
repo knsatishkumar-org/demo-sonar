@@ -39,12 +39,12 @@ dotnet build src --configuration release
 # Now execute tests with special attention to produce output
 # that can be easily read by SonarCloud analyzer
 dotnet test "./src/DotNetCoreCryptography.Tests/DotNetCoreCryptography.Tests.csproj" '
-  --collect "XPlat Code Coverage" '           # cross platform code coverage
-  --results-directory TestResults/ '          # Test Result directory
-  --logger "trx;LogFileName=unittests.trx" '  # Use standard trx format for logger output
-  --no-build '
-  --no-restore '
-  --configuration release '
-  -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover # Special open cover data collector
+  -collect:"XPlat Code Coverage" '           # cross platform code coverage
+  -results-directory TestResults/ '          # Test Result directory
+  -logger "trx;LogFileName=unittests.trx" '  # Use standard trx format for logger output
+  -no-build '
+  -no-restore '
+  -configuration release '
+  - DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover # Special open cover data collector
 
 dotnet tool run dotnet-sonarscanner end /d:sonar.login="$sonarSecret"
