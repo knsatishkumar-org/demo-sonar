@@ -22,7 +22,8 @@ $branch = git branch --show-current
 Write-Host "branch is $branch"
 
 dotnet tool restore
-dotnet tool run dotnet-sonarscanner begin '
+#dotnet tool run dotnet-sonarscanner begin '
+.\.sonar\scanner\dotnet-sonarscanner begin '
   /k:"alkampfergit_DotNetCoreCryptography" ' # Key of the project
   /v:"$assemblyVer" '                        # Version of the assemly as calculated by gitversion
   /o:"alkampfergit-github" '                 # account
@@ -45,6 +46,7 @@ dotnet test "./src/DotNetCoreCryptography.Tests/DotNetCoreCryptography.Tests.csp
   -no-build '
   -no-restore '
   -configuration release '
-  - DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover '# Special open cover data collector
+  -DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover '# Special open cover data collector
 
-dotnet tool run dotnet-sonarscanner end /d:sonar.login="$sonarSecret"
+.\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="$sonarSecret"
+#dotnet tool run dotnet-sonarscanner end /d:sonar.login="$sonarSecret"
