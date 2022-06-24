@@ -45,6 +45,6 @@ dotnet test "./src/DotNetCoreCryptography.Tests/DotNetCoreCryptography.Tests.csp
   -no-build '
   -no-restore '
   -configuration release '
-  - DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover # Special open cover data collector
+  - DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover '# Special open cover data collector
 
 dotnet tool run dotnet-sonarscanner end /d:sonar.login="$sonarSecret"
