@@ -22,15 +22,15 @@ $branch = git branch --show-current
 Write-Host "branch is $branch"
 
 dotnet tool restore
-dotnet tool run dotnet-sonarscanner begin `
-  /k:"alkampfergit_DotNetCoreCryptography" ` # Key of the project
-  /v:"$assemblyVer" `                        # Version of the assemly as calculated by gitversion
-  /o:"alkampfergit-github" `                 # account
-  /d:sonar.login="$sonarSecret" `            # Secret
-  /d:sonar.host.url="https://sonarcloud.io" `
-  /d:sonar.cs.vstest.reportsPaths=TestResults/*.trx ` # Path where I'm expecting to find test result in trx format
-  /d:sonar.cs.opencover.reportsPaths=TestResults/*/coverage.opencover.xml ` # Name of the code coverage file
-  /d:sonar.coverage.exclusions="**Test*.cs" `   # asembly names to be excluded from code coverage
+dotnet tool run dotnet-sonarscanner begin '
+  /k:"alkampfergit_DotNetCoreCryptography" ' # Key of the project
+  /v:"$assemblyVer" '                        # Version of the assemly as calculated by gitversion
+  /o:"alkampfergit-github" '                 # account
+  /d:sonar.login="$sonarSecret" '            # Secret
+  /d:sonar.host.url="https://sonarcloud.io" '
+  /d:sonar.cs.vstest.reportsPaths=TestResults/*.trx ' # Path where I'm expecting to find test result in trx format
+  /d:sonar.cs.opencover.reportsPaths=TestResults/*/coverage.opencover.xml ' # Name of the code coverage file
+  /d:sonar.coverage.exclusions="**Test*.cs" '   # asembly names to be excluded from code coverage
   /d:sonar.branch.name="$branch"                # Actual branch I'm analyzing.
 
 dotnet restore src
@@ -38,13 +38,13 @@ dotnet build src --configuration release
 
 # Now execute tests with special attention to produce output
 # that can be easily read by SonarCloud analyzer
-dotnet test "./src/DotNetCoreCryptography.Tests/DotNetCoreCryptography.Tests.csproj" `
-  --collect:"XPlat Code Coverage" `           # cross platform code coverage
-  --results-directory TestResults/ `          # Test Result directory
-  --logger "trx;LogFileName=unittests.trx" `  # Use standard trx format for logger output
-  --no-build `
-  --no-restore `
-  --configuration release `
+dotnet test "./src/DotNetCoreCryptography.Tests/DotNetCoreCryptography.Tests.csproj" '
+  --collect "XPlat Code Coverage" '           # cross platform code coverage
+  --results-directory TestResults/ '          # Test Result directory
+  --logger "trx;LogFileName=unittests.trx" '  # Use standard trx format for logger output
+  --no-build '
+  --no-restore '
+  --configuration release '
   -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover # Special open cover data collector
 
 dotnet tool run dotnet-sonarscanner end /d:sonar.login="$sonarSecret"
