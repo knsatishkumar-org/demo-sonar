@@ -9,25 +9,25 @@ namespace MathDemo.Tests
         [Given(@"I have entered (.*) into the calculator")]
         public void GivenIHaveEnteredIntoTheCalculator(int p0)
         {
-            throw new PendingStepException();
+            //throw new PendingStepException();
         }
 
         [Given(@"I have also entered (.*) into the calculator")]
         public void GivenIHaveAlsoEnteredIntoTheCalculator(int p0)
         {
-            throw new PendingStepException();
+            //throw new PendingStepException();
         }
 
         [When(@"I press add")]
         public void WhenIPressAdd()
         {
-            throw new PendingStepException();
+            //throw new PendingStepException();
         }
 
         [Then(@"the result should be (.*) on the screen")]
         public void ThenTheResultShouldBeOnTheScreen(int p0)
         {
-            throw new PendingStepException();
+            //throw new PendingStepException();
         }
     }
 }
