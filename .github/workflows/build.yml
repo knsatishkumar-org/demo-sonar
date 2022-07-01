@@ -44,6 +44,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          AZURE_WEBAPP_NAME: dtedotnetcalc 
         shell: powershell
       #  run: |
       #   .\sonarcloud.ps1 -sonarSecret ${{ secrets.SONAR_TOKEN }}
@@ -53,3 +54,11 @@ jobs:
           dotnet test
           dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'          
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+      - name: Building Release Package
+        run: dotnet build --configuration Release --no-restore
+      - name: 'Deploy to Azure WebApp'
+        uses: azure/webapps-deploy@v2
+        with:
+            app-name: ${{ env.AZURE_WEBAPP_NAME }}
+            publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+            package: './dotnetcorewebapp'
