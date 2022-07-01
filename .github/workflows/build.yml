@@ -5,29 +5,8 @@ on:
       - master
   pull_request:
     types: [opened, synchronize, reopened]
-jobs:
+jobs:      
   build:
-    name: Package
-    runs-on: windows-latest
-    steps: 
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.x'
-          include-prerelease: false
-
-      - name: Build with Release config
-        run: dotnet build --configuration Release
-
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp  
-  sonar:
     name: Build
     runs-on: windows-latest
     steps:
@@ -61,7 +40,7 @@ jobs:
         shell: powershell
         run: |          
           dotnet tool install --global dotnet-coverage
-      - name: Build and analyze
+      - name: Build Project and Sonar Code analysis
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -75,6 +54,24 @@ jobs:
           dotnet test
           dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'          
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+
+      #- name: Set up .NET Core
+      #  uses: actions/setup-dotnet@v1
+      #  with:
+      #    dotnet-version: '6.0.x'
+      #    include-prerelease: false
+
+      #- name: Build with Release config
+      #  run: dotnet build --configuration Release
+
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp  
   deploy:
     runs-on: windows-latest
     needs: build
